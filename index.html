@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Árboles y grafos | Isidro Alexander Chuj Quijivix</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="encabezado">
+    <p class="eyebrow">MATEMÁTICA DISCRETA · LABORATORIO INTERACTIVO</p>
+    <h1>Árboles y grafos<span class="title-dot" aria-hidden="true">.</span></h1>
+    <div class="student-info"><strong>Isidro Alexander Chuj Quijivix</strong><span>Carné 231621</span><span>Universidad del Valle de Guatemala</span></div>
+    <p>Recorre un árbol en preorden, inorden y postorden, y encuentra el camino más corto de un grafo con el algoritmo de Dijkstra.</p>
+  </header>
+
+  <nav class="pestanas" role="tablist" aria-label="Secciones">
+    <button role="tab" id="tab-arboles" aria-controls="arboles" aria-selected="true">Árboles</button>
+    <button role="tab" id="tab-grafos" aria-controls="grafos" aria-selected="false">Grafos y Dijkstra</button>
+    <button role="tab" id="tab-guia" aria-controls="guia" aria-selected="false">Guía a mano</button>
+  </nav>
+
+  <main>
+    <!-- ===================== ÁRBOLES ===================== -->
+    <section id="arboles" class="panel" role="tabpanel" aria-labelledby="tab-arboles">
+      <div class="controles">
+        <form id="formArbol" class="fila">
+          <label class="campo crece">
+            <span>Valores a insertar (separados por comas)</span>
+            <input id="valores" type="text" inputmode="decimal" placeholder="50, 30, 70, 20, 40, 60, 80" autocomplete="off">
+          </label>
+          <button type="submit" class="btn primario">Insertar</button>
+          <button type="button" id="btnEjemploArbol" class="btn">Cargar ejemplo</button>
+          <button type="button" id="btnVaciarArbol" class="btn tenue">Vaciar</button>
+        </form>
+        <p id="msgArbol" class="mensaje" aria-live="polite"></p>
+      </div>
+
+      <div class="lienzo">
+        <p id="arbolVacio" class="vacio">El árbol está vacío. Escribe valores arriba o carga el ejemplo.</p>
+        <svg id="lienzoArbol" role="img" aria-label="Dibujo del árbol binario"></svg>
+      </div>
+
+      <div class="recorridos">
+        <div class="fila">
+          <button class="btn recorrido" data-tipo="pre">Preorden</button>
+          <button class="btn recorrido" data-tipo="in">Inorden</button>
+          <button class="btn recorrido" data-tipo="post">Postorden</button>
+        </div>
+        <div class="resultado" aria-live="polite">
+          <h2 id="recorridoTitulo">Elige un recorrido</h2>
+          <p id="recorridoRegla" class="regla">Cada recorrido visita los mismos nodos, pero en distinto orden.</p>
+          <ol id="recorridoSalida" class="secuencia"></ol>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== GRAFOS ===================== -->
+    <section id="grafos" class="panel" role="tabpanel" aria-labelledby="tab-grafos" hidden>
+      <div class="controles">
+        <div class="fila">
+          <label class="campo">
+            <span>Tipo de peso</span>
+            <select id="modoPeso">
+              <option value="peso">Distancia o peso directo</option>
+              <option value="ospf">Ancho de banda (costo OSPF)</option>
+            </select>
+          </label>
+          <label class="campo" id="campoRef" hidden>
+            <span>Ancho de banda de referencia (Mbps)</span>
+            <input id="refBw" type="number" min="1" value="100">
+          </label>
+        </div>
+        <p id="notaOspf" class="nota" hidden>Costo OSPF = referencia ÷ ancho de banda del enlace (se redondea hacia abajo, mínimo 1). Más ancho de banda da un costo más pequeño.</p>
+
+        <form id="formArista" class="fila">
+          <label class="campo corto"><span>Origen</span><input id="aOrigen" type="text" placeholder="A" autocomplete="off" required></label>
+          <label class="campo corto"><span>Destino</span><input id="aDestino" type="text" placeholder="B" autocomplete="off" required></label>
+          <label class="campo corto"><span id="etiquetaValor">Peso</span><input id="aValor" type="number" step="any" min="0" placeholder="4" required></label>
+          <button type="submit" class="btn primario">Agregar conexión</button>
+          <button type="button" id="btnEjemploGrafo" class="btn">Cargar ejemplo</button>
+          <button type="button" id="btnVaciarGrafo" class="btn tenue">Vaciar</button>
+        </form>
+        <p id="msgGrafo" class="mensaje" aria-live="polite"></p>
+      </div>
+
+      <div class="dos-columnas">
+        <div class="lienzo">
+          <p id="grafoVacio" class="vacio">Agrega conexiones o carga el ejemplo para ver el grafo.</p>
+          <svg id="lienzoGrafo" role="img" aria-label="Dibujo del grafo con pesos"></svg>
+        </div>
+        <div class="lista">
+          <h2>Conexiones</h2>
+          <div class="tabla-scroll">
+            <table class="tabla">
+              <thead><tr><th>Conexión</th><th id="thValor">Peso</th><th>Costo</th><th><span class="oculto">Acción</span></th></tr></thead>
+              <tbody id="listaAristas"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <div class="controles">
+        <div class="fila">
+          <label class="campo"><span>Desde</span><select id="dOrigen"></select></label>
+          <label class="campo"><span>Hasta</span><select id="dDestino"></select></label>
+          <button id="btnDijkstra" class="btn primario">Calcular camino más corto</button>
+        </div>
+      </div>
+
+      <div id="resultadoCamino" class="resultado" aria-live="polite" hidden></div>
+      <div id="bloqueTabla" hidden>
+        <h2>Tabla de Dijkstra paso a paso</h2>
+        <p class="regla">Así se ve la tabla cuando lo resuelves a mano. El número entre paréntesis es el nodo desde donde llegas. Resaltado: el nodo que se marca como definitivo en ese paso. Subrayado: distancia que mejoró.</p>
+        <div class="tabla-scroll"><table id="tablaDijkstra" class="tabla dijkstra"></table></div>
+      </div>
+    </section>
+
+    <!-- ===================== GUÍA ===================== -->
+    <section id="guia" class="panel guia" role="tabpanel" aria-labelledby="tab-guia" hidden>
+      <article>
+        <h2>1. Construir un árbol binario de búsqueda</h2>
+        <ol>
+          <li>El primer valor es la raíz.</li>
+          <li>Para cada valor nuevo, empieza en la raíz: si es menor, baja a la izquierda; si es mayor, baja a la derecha.</li>
+          <li>Repite hasta encontrar un lugar vacío y colócalo ahí. Los valores repetidos no se insertan.</li>
+        </ol>
+        <p>Ejemplo con 50, 30, 70, 20, 40, 60, 80: 50 es la raíz; 30 va a la izquierda de 50; 70 a la derecha; 20 a la izquierda de 30; 40 a la derecha de 30; 60 a la izquierda de 70; 80 a la derecha de 70.</p>
+      </article>
+
+      <article>
+        <h2>2. Recorrer el árbol</h2>
+        <table class="tabla">
+          <thead><tr><th>Recorrido</th><th>Regla</th><th>Resultado del ejemplo</th></tr></thead>
+          <tbody>
+            <tr><td>Preorden</td><td>Raíz, izquierda, derecha</td><td class="num">50, 30, 20, 40, 70, 60, 80</td></tr>
+            <tr><td>Inorden</td><td>Izquierda, raíz, derecha</td><td class="num">20, 30, 40, 50, 60, 70, 80</td></tr>
+            <tr><td>Postorden</td><td>Izquierda, derecha, raíz</td><td class="num">20, 40, 30, 60, 80, 70, 50</td></tr>
+          </tbody>
+        </table>
+        <p><strong>Truco del contorno:</strong> dibuja una línea que rodee el árbol por fuera, empezando a la izquierda de la raíz y bajando. Anota cada nodo cuando la línea pase por su lado izquierdo (preorden), por debajo (inorden) o por su lado derecho (postorden).</p>
+        <p><strong>Para comprobar:</strong> en un árbol binario de búsqueda, el inorden siempre sale ordenado de menor a mayor. En preorden la raíz sale primero, y en postorden sale al final.</p>
+      </article>
+
+      <article>
+        <h2>3. Costo OSPF a partir del ancho de banda</h2>
+        <p>En redes, OSPF convierte el ancho de banda en un peso con esta fórmula:</p>
+        <p class="formula">costo = ancho de banda de referencia ÷ ancho de banda del enlace</p>
+        <p>Con la referencia de 100 Mbps: un enlace de 10 Mbps cuesta 100 ÷ 10 = 10; uno de 50 Mbps cuesta 2; uno de 100 Mbps cuesta 1. El resultado se redondea hacia abajo y nunca es menor que 1. A más ancho de banda, menor costo, y Dijkstra prefiere los caminos de menor costo total.</p>
+      </article>
+
+      <article>
+        <h2>4. Dijkstra a mano</h2>
+        <ol>
+          <li>Haz una tabla con una columna por nodo. En la fila de inicio pon 0 en el origen y ∞ en los demás.</li>
+          <li>Escoge el nodo sin marcar con la distancia más pequeña y márcalo como definitivo.</li>
+          <li>Para cada vecino sin marcar, suma la distancia del nodo marcado más el peso de la arista. Si es menor que lo que había, escríbelo con el nodo de donde vienes entre paréntesis.</li>
+          <li>Repite los pasos 2 y 3 hasta marcar todos los nodos (o hasta marcar el destino).</li>
+          <li>Para sacar el camino, empieza en el destino y sigue hacia atrás las letras entre paréntesis hasta llegar al origen.</li>
+        </ol>
+        <p>Ejemplo (el que carga el botón en modo distancia), de A a F:</p>
+        <div class="tabla-scroll">
+          <table class="tabla dijkstra">
+            <thead><tr><th>Paso</th><th>Se marca</th><th>A</th><th>B</th><th>C</th><th>D</th><th>E</th><th>F</th></tr></thead>
+            <tbody>
+              <tr><td>Inicio</td><td>—</td><td>0</td><td>∞</td><td>∞</td><td>∞</td><td>∞</td><td>∞</td></tr>
+              <tr><td>1</td><td><strong>A</strong></td><td class="elegido">0</td><td>4 (A)</td><td>2 (A)</td><td>∞</td><td>∞</td><td>∞</td></tr>
+              <tr><td>2</td><td><strong>C</strong></td><td class="hecho">—</td><td>3 (C)</td><td class="elegido">2 (A)</td><td>10 (C)</td><td>12 (C)</td><td>∞</td></tr>
+              <tr><td>3</td><td><strong>B</strong></td><td class="hecho">—</td><td class="elegido">3 (C)</td><td class="hecho">—</td><td>8 (B)</td><td>12 (C)</td><td>∞</td></tr>
+              <tr><td>4</td><td><strong>D</strong></td><td class="hecho">—</td><td class="hecho">—</td><td class="hecho">—</td><td class="elegido">8 (B)</td><td>10 (D)</td><td>14 (D)</td></tr>
+              <tr><td>5</td><td><strong>E</strong></td><td class="hecho">—</td><td class="hecho">—</td><td class="hecho">—</td><td class="hecho">—</td><td class="elegido">10 (D)</td><td>12 (E)</td></tr>
+              <tr><td>6</td><td><strong>F</strong></td><td class="hecho">—</td><td class="hecho">—</td><td class="hecho">—</td><td class="hecho">—</td><td class="hecho">—</td><td class="elegido">12 (E)</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>Camino hacia atrás: F viene de E, E de D, D de B, B de C, C de A. El camino más corto es <strong>A → C → B → D → E → F</strong> con costo <strong>12</strong>.</p>
+      </article>
+
+      <article>
+        <h2>5. Errores comunes</h2>
+        <ul>
+          <li>Marcar un nodo que no tiene la distancia más pequeña. Siempre compara todos los que siguen sin marcar.</li>
+          <li>Olvidar que en un grafo no dirigido la arista A–B también sirve de B a A.</li>
+          <li>Cambiar una distancia por otra más grande. Solo se reemplaza si la nueva es menor.</li>
+          <li>En OSPF, usar el ancho de banda directo como peso. Primero conviértelo a costo con la fórmula.</li>
+        </ul>
+      </article>
+    </section>
+  </main>
+
+  <footer class="pie"><strong>Isidro Alexander Chuj Quijivix · 231621</strong><span>Matemática Discreta · Universidad del Valle de Guatemala</span></footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
