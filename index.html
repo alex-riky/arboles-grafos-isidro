@@ -7,6 +7,13 @@
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+  <a class="skip-link" href="#contenido">Saltar al contenido</a>
+  <aside class="side-rail"><div class="rail-brand"><span class="brand-symbol" aria-hidden="true">↳</span><strong>Estructuras<span>LABORATORIO DISCRETO</span></strong></div><p class="rail-label">EXPLORAR MÓDULOS</p>  <nav class="pestanas" role="tablist" aria-label="Secciones">
+    <button role="tab" id="tab-arboles" aria-controls="arboles" aria-selected="true">Árboles</button>
+    <button role="tab" id="tab-grafos" aria-controls="grafos" aria-selected="false">Grafos y Dijkstra</button>
+    <button role="tab" id="tab-guia" aria-controls="guia" aria-selected="false">Guía a mano</button>
+  </nav><div class="rail-note"><span>PIENSA EN CONEXIONES</span><p>Construye.<br>Recorre.<br>Comprende.</p></div><div class="rail-footer">Universidad del Valle de Guatemala<br>Matemática Discreta · 231621</div></aside>
+  <div class="app-shell"><div class="app-topline"><span>ESPACIO DE APRENDIZAJE</span><span>Árboles / Grafos / Algoritmos</span></div>
   <header class="encabezado">
     <p class="eyebrow">MATEMÁTICA DISCRETA · LABORATORIO INTERACTIVO</p>
     <h1>Árboles y grafos<span class="title-dot" aria-hidden="true">.</span></h1>
@@ -14,29 +21,12 @@
     <p>Recorre un árbol en preorden, inorden y postorden, y encuentra el camino más corto de un grafo con el algoritmo de Dijkstra.</p>
   </header>
 
-  <nav class="pestanas" role="tablist" aria-label="Secciones">
-    <button role="tab" id="tab-arboles" aria-controls="arboles" aria-selected="true">Árboles</button>
-    <button role="tab" id="tab-grafos" aria-controls="grafos" aria-selected="false">Grafos y Dijkstra</button>
-    <button role="tab" id="tab-guia" aria-controls="guia" aria-selected="false">Guía a mano</button>
-  </nav>
 
-  <main>
+
+  <main id="contenido">
     <!-- ===================== ÁRBOLES ===================== -->
     <section id="arboles" class="panel" role="tabpanel" aria-labelledby="tab-arboles">
-      <div class="controles">
-        <form id="formArbol" class="fila">
-          <label class="campo crece">
-            <span>Valores a insertar (separados por comas)</span>
-            <input id="valores" type="text" inputmode="decimal" placeholder="50, 30, 70, 20, 40, 60, 80" autocomplete="off">
-          </label>
-          <button type="submit" class="btn primario">Insertar</button>
-          <button type="button" id="btnEjemploArbol" class="btn">Cargar ejemplo</button>
-          <button type="button" id="btnVaciarArbol" class="btn tenue">Vaciar</button>
-        </form>
-        <p id="msgArbol" class="mensaje" aria-live="polite"></p>
-      </div>
-
-      <div class="lienzo">
+<div class="tree-stack">      <div class="lienzo"><span class="canvas-label">ESTRUCTURA DEL ÁRBOL</span>
         <p id="arbolVacio" class="vacio">El árbol está vacío. Escribe valores arriba o carga el ejemplo.</p>
         <svg id="lienzoArbol" role="img" aria-label="Dibujo del árbol binario"></svg>
       </div>
@@ -53,38 +43,24 @@
           <ol id="recorridoSalida" class="secuencia"></ol>
         </div>
       </div>
+</div>      <div class="controles tree-editor"><p class="block-kicker">01 / DATOS DE ENTRADA</p><h2>Construye tu árbol</h2>
+        <form id="formArbol" class="fila">
+          <label class="campo crece">
+            <span>Valores a insertar (separados por comas)</span>
+            <input id="valores" type="text" inputmode="decimal" placeholder="50, 30, 70, 20, 40, 60, 80" autocomplete="off">
+          </label>
+          <button type="submit" class="btn primario">Insertar</button>
+          <button type="button" id="btnEjemploArbol" class="btn">Cargar ejemplo</button>
+          <button type="button" id="btnVaciarArbol" class="btn tenue">Vaciar</button>
+        </form>
+        <p id="msgArbol" class="mensaje" aria-live="polite"></p>
+      </div>
+
     </section>
 
     <!-- ===================== GRAFOS ===================== -->
     <section id="grafos" class="panel" role="tabpanel" aria-labelledby="tab-grafos" hidden>
-      <div class="controles">
-        <div class="fila">
-          <label class="campo">
-            <span>Tipo de peso</span>
-            <select id="modoPeso">
-              <option value="peso">Distancia o peso directo</option>
-              <option value="ospf">Ancho de banda (costo OSPF)</option>
-            </select>
-          </label>
-          <label class="campo" id="campoRef" hidden>
-            <span>Ancho de banda de referencia (Mbps)</span>
-            <input id="refBw" type="number" min="1" value="100">
-          </label>
-        </div>
-        <p id="notaOspf" class="nota" hidden>Costo OSPF = referencia ÷ ancho de banda del enlace (se redondea hacia abajo, mínimo 1). Más ancho de banda da un costo más pequeño.</p>
-
-        <form id="formArista" class="fila">
-          <label class="campo corto"><span>Origen</span><input id="aOrigen" type="text" placeholder="A" autocomplete="off" required></label>
-          <label class="campo corto"><span>Destino</span><input id="aDestino" type="text" placeholder="B" autocomplete="off" required></label>
-          <label class="campo corto"><span id="etiquetaValor">Peso</span><input id="aValor" type="number" step="any" min="0" placeholder="4" required></label>
-          <button type="submit" class="btn primario">Agregar conexión</button>
-          <button type="button" id="btnEjemploGrafo" class="btn">Cargar ejemplo</button>
-          <button type="button" id="btnVaciarGrafo" class="btn tenue">Vaciar</button>
-        </form>
-        <p id="msgGrafo" class="mensaje" aria-live="polite"></p>
-      </div>
-
-      <div class="dos-columnas">
+<div class="graph-layout"><div class="graph-main">      <div class="dos-columnas">
         <div class="lienzo">
           <p id="grafoVacio" class="vacio">Agrega conexiones o carga el ejemplo para ver el grafo.</p>
           <svg id="lienzoGrafo" role="img" aria-label="Dibujo del grafo con pesos"></svg>
@@ -114,7 +90,34 @@
         <p class="regla">Así se ve la tabla cuando lo resuelves a mano. El número entre paréntesis es el nodo desde donde llegas. Resaltado: el nodo que se marca como definitivo en ese paso. Subrayado: distancia que mejoró.</p>
         <div class="tabla-scroll"><table id="tablaDijkstra" class="tabla dijkstra"></table></div>
       </div>
-    </section>
+</div>      <div class="controles graph-editor"><p class="block-kicker">01 / DATOS DE LA RED</p><h2>Configura tus conexiones</h2>
+        <div class="fila">
+          <label class="campo">
+            <span>Tipo de peso</span>
+            <select id="modoPeso">
+              <option value="peso">Distancia o peso directo</option>
+              <option value="ospf">Ancho de banda (costo OSPF)</option>
+            </select>
+          </label>
+          <label class="campo" id="campoRef" hidden>
+            <span>Ancho de banda de referencia (Mbps)</span>
+            <input id="refBw" type="number" min="1" value="100">
+          </label>
+        </div>
+        <p id="notaOspf" class="nota" hidden>Costo OSPF = referencia ÷ ancho de banda del enlace (se redondea hacia abajo, mínimo 1). Más ancho de banda da un costo más pequeño.</p>
+
+        <form id="formArista" class="fila">
+          <label class="campo corto"><span>Origen</span><input id="aOrigen" type="text" placeholder="A" autocomplete="off" required></label>
+          <label class="campo corto"><span>Destino</span><input id="aDestino" type="text" placeholder="B" autocomplete="off" required></label>
+          <label class="campo corto"><span id="etiquetaValor">Peso</span><input id="aValor" type="number" step="any" min="0" placeholder="4" required></label>
+          <button type="submit" class="btn primario">Agregar conexión</button>
+          <button type="button" id="btnEjemploGrafo" class="btn">Cargar ejemplo</button>
+          <button type="button" id="btnVaciarGrafo" class="btn tenue">Vaciar</button>
+        </form>
+        <p id="msgGrafo" class="mensaje" aria-live="polite"></p>
+      </div>
+
+</div>    </section>
 
     <!-- ===================== GUÍA ===================== -->
     <section id="guia" class="panel guia" role="tabpanel" aria-labelledby="tab-guia" hidden>
@@ -190,6 +193,7 @@
 
   <footer class="pie"><strong>Isidro Alexander Chuj Quijivix · 231621</strong><span>Matemática Discreta · Universidad del Valle de Guatemala</span></footer>
 
+  </div>
   <script src="script.js"></script>
 </body>
 </html>
