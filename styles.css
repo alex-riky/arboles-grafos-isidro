@@ -172,3 +172,52 @@ svg .etiqueta.en-camino text { fill: #8d341b; }
   .guia article { margin-bottom: 15px; }
   .pie { font-size: 10px; }
 }
+/* Distribución del laboratorio: navegación lateral y editores independientes. */
+.skip-link{position:fixed;left:16px;top:-70px;z-index:20;padding:10px 15px;background:white;color:var(--texto)}
+.skip-link:focus{top:10px}
+.side-rail{position:fixed;inset:0 auto 0 0;width:225px;background:#183d35;color:#f7f5ec;padding:30px 19px;display:flex;flex-direction:column;z-index:5;overflow:auto}
+.rail-brand{display:flex;gap:10px;align-items:center;padding:0 5px 35px}
+.brand-symbol{display:grid;place-items:center;width:37px;height:40px;border:1px solid #8fa897;border-radius:8px;font:29px Georgia;color:#ecbc8b}
+.rail-brand strong{font-size:21px;line-height:1.1;letter-spacing:-.6px}
+.rail-brand strong span{display:block;font-size:8px;letter-spacing:1.6px;font-weight:500;margin-top:8px;color:#c4d4c7}
+.rail-label{font:9px var(--mono);letter-spacing:1.3px;color:#b3cbb9;margin:4px 10px 13px}
+.side-rail .pestanas{padding:0;margin:0;display:grid;gap:9px}
+.side-rail .pestanas button{min-height:52px;width:100%;padding:12px;text-align:left;border:1px solid transparent;border-radius:7px;color:#d8e6da;background:transparent;font-size:12px;justify-content:flex-start;white-space:normal}
+.side-rail .pestanas button:hover{background:#285346;color:white}
+.side-rail .pestanas button[aria-selected='true']{background:#f1efdf;color:#183d35}
+.rail-note{border-top:1px solid #567367;margin:40px 9px 0;padding-top:22px}
+.rail-note>span{font-size:8px;letter-spacing:1.5px;color:#b3cbb9}
+.rail-note p{font:30px/1.25 Georgia,serif;color:#f1d6b6;letter-spacing:-.5px}
+.rail-footer{margin-top:auto;padding:25px 9px 0;font-size:9px;line-height:1.8;color:#b8cdbf}
+.app-shell{margin-left:225px}
+.app-topline{display:flex;justify-content:space-between;gap:15px;padding:18px 35px;border-bottom:1px solid var(--linea);font:9px var(--mono);letter-spacing:1px;color:var(--tenue)}
+.encabezado,.app-shell main,.app-shell .pie{max-width:1330px;padding-inline:35px}
+.encabezado{padding-top:32px;padding-bottom:30px}
+.encabezado h1{font-size:clamp(40px,4.5vw,62px);padding-right:300px}
+.student-info{top:58px;right:35px;max-width:275px}
+.encabezado>p:not(.eyebrow){max-width:700px;font-size:14px}
+#arboles{grid-template-columns:minmax(0,1fr) 290px;gap:24px}
+#arboles>.tree-stack{grid-column:1;display:grid;gap:20px;min-width:0}
+#arboles>.controles{grid-column:2;grid-row:auto}
+.tree-stack>.lienzo{min-height:370px;padding:45px 25px 30px}
+.canvas-label{position:absolute;left:24px;top:18px;font:9px var(--mono);letter-spacing:1.4px;color:var(--tenue)}
+.block-kicker{font:9px var(--mono);letter-spacing:1px;color:var(--acento);margin:0}
+.tree-editor h2,.graph-editor h2{font:25px/1.2 Georgia,serif;margin:0 0 6px}
+.tree-editor{align-self:start}
+.graph-layout{display:grid;grid-template-columns:minmax(0,1fr) 310px;gap:24px;align-items:start}
+.graph-main{display:grid;gap:20px;min-width:0}
+.graph-main .dos-columnas{grid-template-columns:minmax(0,1fr);gap:20px}
+.graph-main .dos-columnas>.lienzo{min-height:370px}
+.graph-editor{border-top:4px solid var(--acento)}
+.graph-editor .fila{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.graph-editor .fila>.campo{max-width:none;min-width:0}
+.graph-editor .fila>.campo:first-child:nth-last-child(1),.graph-editor #campoRef{grid-column:1/-1}
+.graph-editor #formArista>.campo:nth-child(3),.graph-editor #formArista>.btn{grid-column:1/-1}
+.graph-main .controles>.fila{display:grid;grid-template-columns:1fr 1fr}
+.graph-main #btnDijkstra{grid-column:1/-1}
+.app-shell .pie{margin-top:10px}
+@media(min-width:1600px){#arboles{grid-template-columns:minmax(0,1fr) 330px}.graph-layout{grid-template-columns:minmax(0,1fr) 330px}}
+@media(max-width:1200px){.encabezado h1{padding-right:0}.student-info{position:static;display:flex;gap:8px 15px;max-width:none}.app-shell main,.encabezado,.app-shell .pie{padding-inline:25px}#arboles{grid-template-columns:minmax(0,1fr) 250px}.graph-layout{grid-template-columns:minmax(0,1fr) 270px}}
+@media(max-width:1000px){.side-rail{position:static;width:100%;padding:18px 22px;display:block}.rail-brand{padding:0 0 15px}.rail-label,.rail-note,.rail-footer{display:none}.side-rail .pestanas{display:flex;gap:8px}.side-rail .pestanas button{width:auto;flex:1;padding:10px;justify-content:center}.app-shell{margin-left:0}.app-topline{padding:14px 25px;font-size:8px}.encabezado{padding-top:25px}.student-info{display:flex}#arboles{grid-template-columns:minmax(0,1fr) 270px}.graph-layout{grid-template-columns:minmax(0,1fr) 290px}}
+@media(max-width:700px){.side-rail{padding:16px}.rail-brand{padding-bottom:13px}.side-rail .pestanas{display:flex;flex-wrap:wrap}.side-rail .pestanas button{font-size:11px;gap:6px;min-height:44px}.side-rail .pestanas button:last-child{flex-basis:100%}.app-topline{padding:12px 18px;font-size:7px}.app-topline>span:last-child{display:none}.encabezado,.app-shell main,.app-shell .pie{padding-inline:18px}.encabezado h1{font-size:42px}.student-info{display:grid}.tree-stack>.lienzo{min-height:260px;padding:45px 18px 20px}#arboles{grid-template-columns:minmax(0,1fr)}#arboles>.tree-stack{grid-column:1;grid-row:2}#arboles>.controles{grid-column:1;grid-row:1}.graph-layout{grid-template-columns:minmax(0,1fr)}.graph-editor{grid-row:1}.graph-main{grid-row:2}.graph-main .dos-columnas>.lienzo{min-height:280px}.graph-editor .fila>.btn{min-width:0}.app-shell .pie{font-size:10px}}
+@media print{.side-rail,.app-topline{display:none}.app-shell{margin:0}.graph-layout{display:block}#arboles>.tree-stack{display:block}.tree-stack .lienzo{min-height:200px}.student-info{position:static}.encabezado h1{font-size:35px;padding:0}.graph-main{display:block}}
